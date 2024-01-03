@@ -1858,7 +1858,11 @@ private:
         // when compiling without exception support there is no formal parameter "e" in the catch handler.
         // Declaring a local variable here does not hurt and will be "used" to make the code in the handler
         // compilable although the code will never be executed.
+        // Creating an std::exception is a relatively heavy operation because it involves stack unwinding, 
+        // so it is only created when exceptions are not supported.
+#ifdef BOOST_NO_EXCEPTIONS
         std::exception e;
+#endif
         BOOST_TRY
         {
             return this->do_process_event(evt,is_direct_call);
